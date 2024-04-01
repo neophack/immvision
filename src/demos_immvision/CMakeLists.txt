@@ -5,5 +5,7 @@ fetch_hello_imgui() # see cmake/fetch_hello_imgui.cmake
 add_subdirectory(demo_inspector)
 add_subdirectory(demo_immdebug)
 add_subdirectory(demo_immvision)
+add_subdirectory(calib_camera)
+add_subdirectory(aoi_camera)
 
 FILE(COPY ${CMAKE_CURRENT_LIST_DIR}/resources DESTINATION ${CMAKE_BINARY_DIR}/bin)

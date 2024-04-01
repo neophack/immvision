@@ -5,6 +5,9 @@ project(immvision
     HOMEPAGE_URL "https://github.com/pthom/immvision/"
     )
 
+add_compile_options(-fexec-charset=UTF-8)
+
+set(BUILD_SHARED_LIBS OFF)
 
 ###############################################################################
 # Build Options
@@ -84,6 +87,7 @@ endif()
 ###############################################################################
 set(CMAKE_CXX_STANDARD 17)
 
+#set(IMMVISION_FETCH_OPENCV ON CACHE BOOL "Download opencv if needed")
 include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/find_opencv.cmake)
 immvision_find_opencv()
 find_package(OpenCV REQUIRED)  # Will try to find OpenCV (if IMMVISION_FETCH_OPENCV, will also download and build it)
@@ -91,9 +95,12 @@ find_package(OpenCV REQUIRED)  # Will try to find OpenCV (if IMMVISION_FETCH_OPE
 set(IMMVISION_VERSION ${PROJECT_VERSION})
 add_compile_definitions(IMMVISION_VERSION="${PROJECT_VERSION}")
 
+include(cmake/fetch_glfw3.cmake)
 include(cmake/fetch_hello_imgui.cmake)
 
 add_subdirectory(src)
+
+#add_subdirectory("deep_perception_engine")
 
 if (IMMVISION_BUILD_ALL_IN_ONE)
     add_subdirectory(src_all_in_one)

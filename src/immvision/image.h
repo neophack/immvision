@@ -102,6 +102,8 @@ namespace ImmVision
         // (for example, for live video images)
         bool RefreshImage = false;
 
+
+        bool forceFullView = false;
         //
         // Display size and title
         //

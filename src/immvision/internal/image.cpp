@@ -293,6 +293,7 @@ namespace ImmVision
                 ImGui::Checkbox("Show image info", &params->ShowImageInfo);
                 ImGui::Checkbox("Show pixel info", &params->ShowPixelInfo);
                 ImGui::Checkbox("Show zoom buttons", &params->ShowZoomButtons);
+                ImGui::Checkbox("force Full View", &params->forceFullView);
                 ImGuiImm::EndGroupPanel();
             }
 
@@ -455,6 +456,8 @@ namespace ImmVision
                         ZoomPanTransform::IsEqual(zoomMatrix, fullViewZoomInfo)) // disabled flag
                         )
                         zoomMatrix = fullViewZoomInfo;
+                    if(params->forceFullView)
+                        zoomMatrix = fullViewZoomInfo;
                 }
             }
 
@@ -464,6 +467,7 @@ namespace ImmVision
         //
         auto fnShowImage = [&params](const GlTextureCv& glTexture) ->  MouseInformation
         {
+
             cv::Point2d mouseLocation = ImageWidgets::DisplayTexture_TrackMouse(
                     glTexture,
                     ImVec2((float)params->ImageDisplaySize.width, (float)params->ImageDisplaySize.height));
@@ -484,6 +488,8 @@ namespace ImmVision
         //
         auto fnShowPixelInfo = [&image, &params](const cv::Point2d& mouseLocation)
         {
+
+
             cv::Point mouseLoc =
                 mouseLocation.x >= 0. ?
                         cv::Point((int)(mouseLocation.x + 0.5), (int)(mouseLocation.y + 0.5))
@@ -580,6 +586,11 @@ namespace ImmVision
                 Colormap::InitStatsOnNewImage(image, roi, &params->ColormapSettings);
             if (! ZoomPanTransform::IsEqual(cacheParams.PreviousParams.ZoomPanMatrix, params->ZoomPanMatrix))
                 Colormap::UpdateRoiStatsInteractively(image, roi, &params->ColormapSettings);
+
+            auto fullViewZoomInfo = ZoomPanTransform::MakeFullView(image.size(), params->ImageDisplaySize);
+
+            if(params->forceFullView)
+                params->ZoomPanMatrix = fullViewZoomInfo;
         }
         catch(std::exception& e)
         {
@@ -636,6 +647,7 @@ namespace ImmVision
             imageParams.ShowAlphaChannelCheckerboard = false;
             imageParams.ShowSchoolPaperBackground = false;
             imageParams.ShowZoomButtons = false;
+            imageParams.forceFullView = false;
             imageParams.AddWatchedPixelOnDoubleClick = false;
         }
         return imageParams;
