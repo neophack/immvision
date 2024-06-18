@@ -14,6 +14,8 @@
 #include <mutex>
 #include <string>
 #include <numeric>
+#include <unistd.h>
+
 
 // Poor man's fix for C++ late arrival in the unicode party:
 //    - C++17: u8"my string" is of type const char*
